@@ -103,10 +103,12 @@ git clone https://github.com/UZ-SLAMLab/ORB_SLAM3.git ORB_SLAM3
 ```
 windows
 ./vcpkg.exe install eigen3 pangolin boost opencv openssl --triplet x64-windows
+./vcpkg.exe install g2o --head --triplet x64-windows
 ```
 ```
 linux:
 ./vcpkg install eigen3 pangolin boost opencv openssl --triplet x64-linux
+./vcpkg.exe install g2o --head --triplet x64-linux
 ```
 4- Build ORB SLAM 3
 ```

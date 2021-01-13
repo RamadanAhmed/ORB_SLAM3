@@ -70,15 +70,19 @@ target_include_directories(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
                       PUBLIC
+                      # Eigen
                       Eigen3::Eigen
+                      # OpenCV
                       opencv_core
                       opencv_imgproc
                       opencv_imgcodecs
+                      # Boost
                       Boost::serialization
+                      # OpenSSL
                       OpenSSL::Crypto
+                      # Pangolin
                       pangolin
-                      # ThirdParty
-                      ORB_SLAM::DBoW2
+                      # g2o
                       g2o::core
                       g2o::types_data
                       g2o::types_slam2d
@@ -89,7 +93,9 @@ target_link_libraries(${PROJECT_NAME}
                       g2o::solver_structure_only
                       g2o::solver_csparse
                       g2o::csparse_extension
-                      g2o::solver_eigen)
+                      g2o::solver_eigen
+                      # ThirdParty/DBoW2
+                      ORB_SLAM::DBoW2)
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 

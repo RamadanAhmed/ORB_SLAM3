@@ -2,3 +2,13 @@
 
 include("${CMAKE_CURRENT_LIST_DIR}/@TARGETS_EXPORT_NAME@.cmake")
 check_required_components("@PROJECT_NAME@")
+find_dependency(OpenCV)     # opencv_core opencv_img_codecs
+find_dependency(Eigen3)     # Eigen3::Eigen
+find_dependency(g2o)        # g2o::core g2o::types_data 
+                            # g2o::types_slam2d g2o::types_slam3d g2o::types_sba 
+                            # g2o::types_sim3 g2o::solver_dense g2o::solver_structure_only 
+                            # g2o::solver_csparse g2o::csparse_extension g2o::solver_eigen
+find_dependency(Pangolin)   # pangolin
+find_dependency(spdlog)     # spdlog::spdlog
+find_dependency(Boost)      # serialization
+find_dependency(OpenSSL)    # crypto
