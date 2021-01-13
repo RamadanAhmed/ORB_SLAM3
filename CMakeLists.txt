@@ -17,13 +17,13 @@ option(BUILD_TOOLS          "Build Tools"       OFF)
 ###############################      Option      #############################################
 
 ###############################     Packages     #############################################
-find_package(OpenCV CONFIG REQUIRED COMPONENTS core imgproc imgcodecs) # opencv_core opencv_img_codecs
-find_package(Eigen3 CONFIG REQUIRED) # Eigen3::Eigen
-find_package(g2o CONFIG REQUIRED)
-find_package(Pangolin CONFIG REQUIRED) # pangolin
-find_package(spdlog CONFIG REQUIRED) # spdlog::spdlog
-find_package(Boost REQUIRED COMPONENTS serialization) # serialization
-find_package(OpenSSL REQUIRED) # crypto
+find_package(OpenCV     CONFIG REQUIRED COMPONENTS core imgproc imgcodecs) # opencv_core opencv_img_codecs
+find_package(Eigen3     CONFIG REQUIRED) # Eigen3::Eigen
+find_package(g2o        CONFIG REQUIRED)
+find_package(Pangolin   CONFIG REQUIRED) # pangolin
+find_package(spdlog     CONFIG REQUIRED) # spdlog::spdlog
+find_package(Boost             REQUIRED COMPONENTS serialization) # serialization
+find_package(OpenSSL           REQUIRED) # crypto
 # Thirdparty packages
 add_subdirectory(Thirdparty/DBoW2)
 ###############################     Packages     #############################################
@@ -66,7 +66,6 @@ target_sources(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
                            PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/CameraModels>
                            ${Pangolin_INCLUDE_DIRS})
 
 target_link_libraries(${PROJECT_NAME}
@@ -90,8 +89,7 @@ target_link_libraries(${PROJECT_NAME}
                       g2o::solver_structure_only
                       g2o::solver_csparse
                       g2o::csparse_extension
-                      g2o::solver_eigen
-                      )
+                      g2o::solver_eigen)
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
@@ -134,7 +132,7 @@ configure_package_config_file(
 )
 
 install(
-    TARGETS ${PROJECT_NAME} DBoW2 #g2o
+    TARGETS ${PROJECT_NAME} DBoW2
     EXPORT "${TARGETS_EXPORT_NAME}"
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"

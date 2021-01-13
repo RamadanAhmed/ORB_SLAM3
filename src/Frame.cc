@@ -24,7 +24,7 @@
 #include "ORBextractor.h"
 #include "Converter.h"
 #include "ORBmatcher.h"
-#include "GeometricCamera.h"
+#include "CameraModels/GeometricCamera.h"
 
 #include <thread>
 #include <include/CameraModels/Pinhole.h>

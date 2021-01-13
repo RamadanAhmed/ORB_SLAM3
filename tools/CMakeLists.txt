@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.18)
 
 project(ORB_SLAM3_Tools)
 
+include(HandlePDB)
+
 find_package(spdlog CONFIG REQUIRED)
 
 add_executable(text_to_binary_vocab text_to_binary_vocab.cpp)

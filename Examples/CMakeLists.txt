@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.18)
 
+include(HandlePDB)
+
 project(ORB_SLAM3_Examples)
 
 add_subdirectory(Monocular)
