@@ -17,12 +17,7 @@
                 "D:\\ORB_SLAM3\\Examples\\Stereo-Inertial\\EuRoC_TimeStamps\\MH01.txt"  // path_to_times_file
             ],
             "cwd": "${command:cmake.launchTargetDirectory}",
-            "externalConsole": true,
-            "presentation": {
-                "hidden": false,
-                "group": "",
-                "order": 1
-            }
+            "externalConsole": true 
         }
     ]
 }

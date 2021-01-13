@@ -19,11 +19,13 @@ option(BUILD_TOOLS          "Build Tools"       OFF)
 ###############################     Packages     #############################################
 find_package(OpenCV CONFIG REQUIRED COMPONENTS core imgproc imgcodecs) # opencv_core opencv_img_codecs
 find_package(Eigen3 CONFIG REQUIRED) # Eigen3::Eigen
+find_package(g2o CONFIG REQUIRED)
 find_package(Pangolin CONFIG REQUIRED) # pangolin
+find_package(spdlog CONFIG REQUIRED) # spdlog::spdlog
 find_package(Boost REQUIRED COMPONENTS serialization) # serialization
 find_package(OpenSSL REQUIRED) # crypto
 # Thirdparty packages
-add_subdirectory(Thirdparty/g2o)
+#add_subdirectory(Thirdparty/g2o)
 add_subdirectory(Thirdparty/DBoW2)
 ###############################     Packages     #############################################
 
@@ -66,19 +68,32 @@ target_include_directories(${PROJECT_NAME}
                            PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/CameraModels>
-                           ${OpenCV_INCLUDE_DIRS}
                            ${Pangolin_INCLUDE_DIRS})
 
 target_link_libraries(${PROJECT_NAME}
                       PUBLIC
                       Eigen3::Eigen
-                      ${OpenCV_LIBRARIES}
+                      opencv_core
+                      opencv_imgproc
+                      opencv_imgcodecs
                       Boost::serialization
                       OpenSSL::Crypto
                       pangolin
                       # ThirdParty
                       ORB_SLAM::DBoW2
-                      ORB_SLAM::g2o)
+                      #ORB_SLAM::g2o
+                      g2o::core
+                      g2o::types_data
+                      g2o::types_slam2d
+                      g2o::types_slam3d
+                      g2o::types_sba
+                      g2o::types_sim3
+                      g2o::solver_dense
+                      g2o::solver_structure_only
+                      g2o::solver_csparse
+                      g2o::csparse_extension
+                      g2o::solver_eigen
+                      )
 
 target_compile_options(${PROJECT_NAME}
                        PRIVATE
@@ -125,7 +140,7 @@ configure_package_config_file(
 )
 
 install(
-    TARGETS ${PROJECT_NAME} DBoW2 g2o
+    TARGETS ${PROJECT_NAME} DBoW2 #g2o
     EXPORT "${TARGETS_EXPORT_NAME}"
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
