@@ -7,7 +7,8 @@ function(set_project_warnings project_name)
   option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors" OFF)
 
   set(MSVC_WARNINGS
-      /W4 # Baseline reasonable warnings
+      /bigobj # handle increase number of section of object file in debug mode
+      /W4     # Baseline reasonable warnings
       /wd4275 # non dll-interface class used as base for 
               # dll-interface class 
       /wd4251 # private non dll-interface member variable needs 

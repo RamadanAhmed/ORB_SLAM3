@@ -25,7 +25,6 @@ find_package(spdlog CONFIG REQUIRED) # spdlog::spdlog
 find_package(Boost REQUIRED COMPONENTS serialization) # serialization
 find_package(OpenSSL REQUIRED) # crypto
 # Thirdparty packages
-#add_subdirectory(Thirdparty/g2o)
 add_subdirectory(Thirdparty/DBoW2)
 ###############################     Packages     #############################################
 
@@ -81,7 +80,6 @@ target_link_libraries(${PROJECT_NAME}
                       pangolin
                       # ThirdParty
                       ORB_SLAM::DBoW2
-                      #ORB_SLAM::g2o
                       g2o::core
                       g2o::types_data
                       g2o::types_slam2d
@@ -94,10 +92,6 @@ target_link_libraries(${PROJECT_NAME}
                       g2o::csparse_extension
                       g2o::solver_eigen
                       )
-
-target_compile_options(${PROJECT_NAME}
-                       PRIVATE
-                       $<$<CXX_COMPILER_ID:MSVC>:/bigobj>)
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
