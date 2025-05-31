@@ -1,0 +1,114 @@
+name: CMake Build with vcpkg
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  clang-format:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt install -y clang-format-15
+
+      - name: Run clang-format
+        run: find . -type f -name "*.cpp" -or -name "*.h" -or -name "*.hpp" -not -path "*/GLCamera3/*" -not -path "*/thirdparty/*" -not -path "*/GLThirdPersonCamera1/*" -not -path "*/GLThirdPersonCamera2/*" -not -path "*/OrbitCamera/*" -not -path "*/Trackball/*" -exec clang-format -n --Werror {} \;
+
+  cmake-format:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt install -y python3-pip
+
+      - name: Install cmake-format
+        run: sudo pip install cmakelang
+
+      - name: Run clang-format
+        run: find . -type f -name "CMakeLists.txt" -exec cmake-format --check {} \;
+
+  build:
+    name: ${{ matrix.config.name }}
+    needs: [clang-format, cmake-format]
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {
+              name: "Windows Latest MSVC",
+              os: windows-latest,
+              cc: "cl",
+              cxx: "cl",
+              environment_script: "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+            }
+          - {
+              name: "Ubuntu Latest GCC",
+              os: ubuntu-22.04,
+              cc: "gcc",
+              cxx: "g++"
+            }
+          - {
+              name: "Ubuntu Latest CLang",
+              os: ubuntu-22.04,
+              cc: "clang",
+              cxx: "clang++"
+            }
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+
+    - name: Install dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build libgl1-mesa-dev libglew-dev
+
+    - name: Cache vcpkg
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-vcpkg-modules
+      with:
+        path: |
+          ${{ github.workspace }}/vcpkg
+          ${{ github.workspace }}/build/vcpkg_installed
+        key: ${{ runner.os }}-${{ matrix.config.cc }}-${{ env.cache-name }}-${{ hashFiles('**/vcpkg.json') }}
+
+    - name: Install vcpkg
+      run: |
+        if [ ! -d "${{ github.workspace }}/vcpkg" ]; then
+          git clone https://github.com/Microsoft/vcpkg.git
+          cd vcpkg
+          ./bootstrap-vcpkg.sh
+        fi
+      shell: bash
+
+    - name: Configure CMake (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        call "${{ matrix.config.environment_script }}"
+        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake
+      shell: cmd
+
+    - name: Configure CMake (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake
+      env:
+        CC: ${{ matrix.config.cc }}
+        CXX: ${{ matrix.config.cxx }}
+
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}

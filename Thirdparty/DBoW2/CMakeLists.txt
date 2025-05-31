@@ -4,7 +4,7 @@ project(DBoW2 VERSION 2.0.0)
 
 set(SRCS_DBOW2
   DBoW2/BowVector.cpp
-  DBoW2/FORB.cpp      
+  DBoW2/FORB.cpp
   DBoW2/FeatureVector.cpp
   DBoW2/ScoringObject.cpp)
 
@@ -18,12 +18,12 @@ add_library(${PROJECT_NAME} STATIC)
 
 add_library(ORB_SLAM::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
-target_sources(${PROJECT_NAME} 
-               PRIVATE 
-               ${SRCS_DBOW2} 
+target_sources(${PROJECT_NAME}
+               PRIVATE
+               ${SRCS_DBOW2}
                ${SRCS_DUTILS})
 
-target_include_directories(${PROJECT_NAME} 
+target_include_directories(${PROJECT_NAME}
                            PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/DBoW2/DBoW2>
@@ -31,7 +31,7 @@ target_include_directories(${PROJECT_NAME}
                            $<INSTALL_INTERFACE:include/ThirdParty/DBoW2/DBoW2>
                            $<INSTALL_INTERFACE:include/ThirdParty/DBoW2/DUtils>)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC opencv_core)
+target_link_libraries(${PROJECT_NAME} PUBLIC opencv_core Boost::serialization)
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 

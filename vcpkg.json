@@ -7,14 +7,19 @@
         {
             "name": "pangolin",
             "default-features" : false,
-            "features": ["eigen", 
+            "features": ["eigen",
                          "gui",
                          "png",
                          "jpeg",
                          "vars"]
         },
-        "boost-serialization",        
+        "boost-serialization",
         "openssl"
     ],
-    "overrides": []
+    "builtin-baseline": "b322364f06308bdd24823f9d8f03fe0cc86fd46f",
+    "overrides": [
+        {
+            "name": "pangolin", "version": "0.6#4"
+        }
+    ]
 }
